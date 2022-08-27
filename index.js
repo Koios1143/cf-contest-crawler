@@ -5,8 +5,8 @@ const JSSoup = require('jssoup').default;
 const setCookie = require("set-cookie-parser");
 UserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko/20100101 Firefox/68.0';
 
-const cookie = ""; // Enter your codeforces' session cookies
-const contest = "group/jyBrZLV4j8/contest/290286"; // contest url
+const cookie = "JSESSIONID="; // Enter your codeforces' session cookies. EX: JSESSIONID
+const contest = "group/z3GP4YeQl0/contest/392280"; // update your contest url
 var headers = {
     "Cookie":  cookie,
     "User-Agent": UserAgent,
@@ -46,7 +46,12 @@ function getStatus(curpage) {
         var table = soup2.find("table", "status-frame-datatable");
         var tr = table.findAll("tr");
         for (var i = tr.length - 1; i > 0; i--) {
-            var user = tr[i].find("a", "rated-user").getText();
+            // for individual participants
+            //var user = tr[i].find("a", "rated-user").getText();
+            // for team
+            var user = tr[i].findAll("td", "status-party-cell")[0].find("a").getText();
+            
+            console.log(user)
             var problem = tr[i].findAll("td", "status-small")[1].find("a").attrs.href; problem = problem[problem.length-1];
             var verdict = tr[i].find("td", "status-verdict-cell").getText();
             if (verdict.indexOf("Perfect") != -1 || verdict.indexOf("Accepted") != -1)
